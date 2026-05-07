@@ -180,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   switchInCurve: Curves.easeOutBack,
                   switchOutCurve: Curves.easeIn,
                   transitionBuilder: (Widget child, Animation<double> animation) {
-                    return RotationTransition(turns: animation,child: child,);
+                    return RotationTransition(turns : animation,child: child,);
                   },
                   child: _lastOutcome == RoundOutcome.playerWin
                       ? Image.asset(
