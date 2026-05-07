@@ -182,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   transitionBuilder: (Widget child, Animation<double> animation) {
                     return FadeTransition(
                       opacity: animation,
-                      child: ScaleTransition(scale: animation, child: child),
+                      child: ScaleTransition(scale: Tween<double>(begin: 0.5,end: 1.0).animate(animation), child: FadeTransition(opacity: animation, child: child,)),
                     );
                   },
                   child: _lastOutcome == RoundOutcome.playerWin
