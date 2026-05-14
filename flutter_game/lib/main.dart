@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
 
-void main() {
+void main() 
+{
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget 
+{
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context) 
+  {
+    return MaterialApp
+    (
       title: '猜拳遊戲',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
       home: const MyHomePage(title: '猜拳遊戲'),
@@ -19,7 +23,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatefulWidget 
+{
   const MyHomePage({super.key, required this.title});
 
   final String title;
@@ -28,7 +33,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> 
+{
   final Random _random = Random();
   final AudioPlayer _audioPlayer = AudioPlayer();
   static const String _bgMusicAsset = 'audio/game_music.mp3';
@@ -47,11 +53,13 @@ class _MyHomePageState extends State<MyHomePage> {
   int _computerWinCount = 0;
   int _drawCount = 0;
 
-  void _play(RpsMove playerMove) {
+  void _play(RpsMove playerMove) 
+  {
     final RpsMove computerMove = RpsMove.values[_random.nextInt(RpsMove.values.length)];
     final RoundOutcome outcome = _judge(playerMove, computerMove);
 
-    setState(() {
+    setState(() 
+    {
       _playerMove = playerMove;
       _computerMove = computerMove;
       _lastOutcome = outcome;
@@ -66,8 +74,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  RoundOutcome _judge(RpsMove player, RpsMove computer) {
-    if (player == computer) {
+  RoundOutcome _judge(RpsMove player, RpsMove computer) 
+  {
+    if (player == computer) 
+    {
       return RoundOutcome.draw;
     }
 
@@ -79,8 +89,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return playerWins ? RoundOutcome.playerWin : RoundOutcome.computerWin;
   }
 
-  String _outcomeText(RoundOutcome outcome) {
-    switch (outcome) {
+  String _outcomeText(RoundOutcome outcome) 
+  {
+    switch (outcome) 
+    {
       case RoundOutcome.playerWin:
         return '你贏了！';
       case RoundOutcome.computerWin:
@@ -90,8 +102,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  String _moveLabel(RpsMove? move) {
-    switch (move) {
+  String _moveLabel(RpsMove? move) 
+  {
+    switch (move) 
+    {
       case RpsMove.rock:
         return '石頭';
       case RpsMove.paper:
@@ -103,8 +117,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  String _moveImagePath(RpsMove move) {
-    switch (move) {
+  String _moveImagePath(RpsMove move) 
+  {
+    switch (move) 
+    {
       case RpsMove.rock:
         return _rockPath;
       case RpsMove.paper:
@@ -114,8 +130,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Widget _moveButton({required String imagePath, required RpsMove move}) {
-    return IconButton(
+  Widget _moveButton({required String imagePath, required RpsMove move}) 
+  {
+    return IconButton
+    (
       onPressed: () => _play(move),
       iconSize: 88,
       splashRadius: 48,
@@ -123,13 +141,17 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _starIcons(int count, {double size = 22}) {
-    return Wrap(
+  Widget _starIcons(int count, {double size = 22}) 
+  {
+    return Wrap
+    (
       spacing: 3,
       runSpacing: 2,
-      children: List.generate(
+      children: List.generate
+      (
         count,
-        (_) => Icon(
+        (_) => Icon
+        (
           Icons.star,
           color: Colors.blue,
           size: size,
@@ -138,8 +160,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _resetGameData() {
-    setState(() {
+  void _resetGameData() 
+  {
+    setState(() 
+    {
       _playerMove = null;
       _computerMove = null;
       _lastOutcome = null;
@@ -151,56 +175,69 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  void initState() {
+  void initState() 
+  {
     super.initState();
     // App 啟動時播放音樂檔（assets 來源）。
     _audioPlayer.play(AssetSource(_bgMusicAsset));
   }
 
   @override
-  void dispose() {
+  void dispose() 
+  {
     _audioPlayer.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Padding(
+  Widget build(BuildContext context) 
+  {
+    return Scaffold
+    (
+      body: SafeArea
+      (
+        child: Center
+        (
+          child: Padding
+          (
             padding: const EdgeInsets.all(20),
-            child: Column(
+            child: Column
+            (
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: 
+              [
                 Text(widget.title, style: Theme.of(context).textTheme.headlineMedium),
                 const SizedBox(height: 16),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 320),
                   switchInCurve: Curves.easeOutBack,
                   switchOutCurve: Curves.easeIn,
-                  transitionBuilder: (Widget child, Animation<double> animation) {
+                  transitionBuilder: (Widget child, Animation<double> animation) 
+                  {
                     return RotationTransition(turns : animation,child: child,);
                   },
                   child: _lastOutcome == RoundOutcome.playerWin
-                      ? Image.asset(
+                      ? Image.asset
+                      (
                           _greatePath,
-                          key: const ValueKey('outcome_player_win'),
+                          key: ValueKey(_computerWinCount+_playerWinCount+_drawCount),
                           width: 140,
                           height: 140,
                           fit: BoxFit.contain,
-                        )
+                      )
                       : _lastOutcome == RoundOutcome.computerWin
-                          ? Image.asset(
+                          ? Image.asset
+                          (
                               _cryPath,
-                              key: const ValueKey('outcome_computer_win'),
+                              key: ValueKey(_computerWinCount+_playerWinCount+_drawCount),
                               width: 140,
                               height: 140,
                               fit: BoxFit.contain,
-                            )
-                          : Text(
+                          )
+                          : Text
+                            (
                               _resultText,
-                              key: const ValueKey('outcome_text'),
+                              key: ValueKey(_computerWinCount+_playerWinCount+_drawCount),
                               style: Theme.of(context).textTheme.titleLarge,
                               textAlign: TextAlign.center,
                             ),
@@ -211,18 +248,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 const Text('電腦出拳：'),
                 const SizedBox(height: 8),
                 AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 320),
+                  duration: const Duration(milliseconds: 1500),
                   switchInCurve: Curves.easeOutBack,
                   switchOutCurve: Curves.easeIn,
-                  transitionBuilder: (Widget child, Animation<double> animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: ScaleTransition(scale: animation, child: child),
+                  transitionBuilder: (Widget child, Animation<double> animation) 
+                  {
+                    return RotationTransition
+                    (
+                      turns: animation,
+                      child: ScaleTransition
+                      (
+                        scale: animation, 
+                        child: FadeTransition
+                        (
+                          opacity: animation, 
+                          child: child,
+                        )
+                      ),
                     );
                   },
                   child: _computerMove == null
                       ? const Text('-', key: ValueKey('empty'))
-                      : Image.asset(
+                      : Image.asset
+                        (
                           _moveImagePath(_computerMove!),
                           key: ValueKey(_computerMove),
                           width: 88,
@@ -233,7 +281,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(height: 20),
                 Wrap(
                   spacing: 12,
-                  children: [
+                  children: 
+                  [
                     _moveButton(imagePath: _scissorsPath, move: RpsMove.scissors),
                     _moveButton(imagePath: _rockPath, move: RpsMove.rock),
                     _moveButton(imagePath: _paperPath, move: RpsMove.paper),
@@ -242,8 +291,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
+                  children: 
+                  [
+                    const Text
+                    (
                       '玩家：',
                       style: TextStyle(
                         fontSize: 22,
