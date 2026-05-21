@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
 
+import 'package:flutter/scheduler.dart';
+
 void main() 
 {
   runApp(const MyApp());
@@ -52,6 +54,23 @@ class _MyHomePageState extends State<MyHomePage>
   int _playerWinCount = 0;
   int _computerWinCount = 0;
   int _drawCount = 0;
+
+  final _scissorsBtnAnimNoti = ButtonAnimNotifier(1.0);
+
+  Widget _scissorsBtnAnimBuilder(BuildContext c, double value, Widget? child)
+  {
+    return Transform.scale
+    (
+      scale: value,
+      child: IconButton
+      (
+        onPressed: () {_play(RpsMove.scissors); _scissorsBtnAnimNoti.startAnim();}, 
+        icon: Image.asset(_scissorsPath, width: 88, height: 88, fit: BoxFit.contain,),
+        iconSize: 88,
+        splashRadius: 48,
+      ),
+    );
+  }
 
   void _play(RpsMove playerMove) 
   {
@@ -132,6 +151,11 @@ class _MyHomePageState extends State<MyHomePage>
 
   Widget _moveButton({required String imagePath, required RpsMove move}) 
   {
+    if (move == RpsMove.scissors) 
+    {
+      return ValueListenableBuilder(valueListenable: _scissorsBtnAnimNoti, builder: _scissorsBtnAnimBuilder);
+    }
+
     return IconButton
     (
       onPressed: () => _play(move),
@@ -353,3 +377,47 @@ class _MyHomePageState extends State<MyHomePage>
 enum RpsMove { rock, paper, scissors }
 
 enum RoundOutcome { playerWin, computerWin, draw }
+
+
+class ButtonAnimNotifier extends ValueNotifier<double> implements TickerProvider
+{
+  Ticker? _ticker;
+
+  late final AnimationController _animCtrlr;
+  late final Animation _anim;
+
+  ButtonAnimNotifier(super._value)
+  {
+    _animCtrlr = AnimationController(vsync: this, duration: Duration(milliseconds: 200))
+    ..addListener(() {super.value = _anim.value;});
+
+    _anim = TweenSequence<double>
+    (
+      [
+        TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.6), weight: 50),
+        TweenSequenceItem(tween: Tween(begin: 0.6, end: 1.0), weight: 50),
+      ]
+    ).animate(_animCtrlr);
+  }
+
+  @override
+  Ticker createTicker(TickerCallback onTick) 
+  {
+    _ticker?.dispose();
+    _ticker = Ticker(onTick);
+    return _ticker!;
+  }
+
+  @override
+  void dispose() 
+  {
+    _animCtrlr.dispose();
+    _ticker?.dispose();
+    super.dispose();
+  }
+
+  void startAnim() 
+  {
+    _animCtrlr.forward(from: 0);
+  }
+}
