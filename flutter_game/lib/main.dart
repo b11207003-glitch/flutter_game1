@@ -56,6 +56,8 @@ class _MyHomePageState extends State<MyHomePage>
   int _drawCount = 0;
 
   final _scissorsBtnAnimNoti = ButtonAnimNotifier(1.0);
+  final _rockBtnAnimNoti = ButtonAnimNotifier(1.0);
+  final _paperBtnAnimNoti = ButtonAnimNotifier(1.0);
 
   Widget _scissorsBtnAnimBuilder(BuildContext c, double value, Widget? child)
   {
@@ -66,6 +68,36 @@ class _MyHomePageState extends State<MyHomePage>
       (
         onPressed: () {_play(RpsMove.scissors); _scissorsBtnAnimNoti.startAnim();}, 
         icon: Image.asset(_scissorsPath, width: 88, height: 88, fit: BoxFit.contain,),
+        iconSize: 88,
+        splashRadius: 48,
+      ),
+    );
+  }
+
+Widget _rockBtnAnimBuilder(BuildContext c, double value, Widget? child)
+  {
+    return Transform.scale
+    (
+      scale: value,
+      child: IconButton
+      (
+        onPressed: () {_play(RpsMove.rock); _rockBtnAnimNoti.startAnim();}, 
+        icon: Image.asset(_rockPath, width: 88, height: 88, fit: BoxFit.contain,),
+        iconSize: 88,
+        splashRadius: 48,
+      ),
+    );
+  }
+
+  Widget _paperBtnAnimBuilder(BuildContext c, double value, Widget? child)
+  {
+    return Transform.scale
+    (
+      scale: value,
+      child: IconButton
+      (
+        onPressed: () {_play(RpsMove.paper); _paperBtnAnimNoti.startAnim();}, 
+        icon: Image.asset(_paperPath, width: 88, height: 88, fit: BoxFit.contain,),
         iconSize: 88,
         splashRadius: 48,
       ),
@@ -153,16 +185,28 @@ class _MyHomePageState extends State<MyHomePage>
   {
     if (move == RpsMove.scissors) 
     {
-      return ValueListenableBuilder(valueListenable: _scissorsBtnAnimNoti, builder: _scissorsBtnAnimBuilder);
+      return ValueListenableBuilder
+      (
+        valueListenable: _scissorsBtnAnimNoti, 
+        builder: _scissorsBtnAnimBuilder
+      );
+    } 
+    else if (move == RpsMove.rock) 
+    {
+      return ValueListenableBuilder
+      (
+        valueListenable: _rockBtnAnimNoti, 
+        builder: _rockBtnAnimBuilder
+      );
+    } 
+    else
+    {
+      return ValueListenableBuilder
+      (
+        valueListenable: _paperBtnAnimNoti, 
+        builder: _paperBtnAnimBuilder
+      );
     }
-
-    return IconButton
-    (
-      onPressed: () => _play(move),
-      iconSize: 88,
-      splashRadius: 48,
-      icon: Image.asset(imagePath, width: 88, height: 88, fit: BoxFit.contain),
-    );
   }
 
   Widget _starIcons(int count, {double size = 22}) 
